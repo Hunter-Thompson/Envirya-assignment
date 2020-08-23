@@ -1,0 +1,29 @@
+---
+- hosts: localhost
+  become: true
+  gather_facts: no
+
+  tasks:
+  - name: ensure nginx is at the latest version
+    apt:
+      name: nginx
+      state: latest
+
+  - name: ensure git is at the latest version
+    apt:
+      name: git
+      state: latest
+
+  - name: Clone the github repo
+    shell: git clone https://github.com/Hunter-Thompson/helloworld-html.git
+    args:
+      chdir: /tmp/
+  
+  - name: Copy the html file in its right place
+    shell: mv /tmp/helloworld-html/index.html /var/www/html/index.nginx-debian.html
+
+  - name: start nginx
+    service:
+      name: nginx
+      state: started
+  

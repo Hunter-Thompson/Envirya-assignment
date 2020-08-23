@@ -1,0 +1,7 @@
+.terraform
+.packer
+terraform.tfstate
+terraform.tfstate.backup
+Dockerfile
+manifest.json
+ami_id
