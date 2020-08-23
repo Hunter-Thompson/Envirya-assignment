@@ -5,3 +5,4 @@ terraform.tfstate.backup
 Dockerfile
 manifest.json
 ami_id
+.terraform.tfstate.lock.info
