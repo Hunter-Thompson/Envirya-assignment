@@ -2,20 +2,6 @@ resource "aws_route53_zone" "primary" {
   name = var.primary_zone_address
 }
 
-resource "aws_route53_zone" "dev" {
-  name = var.d_name
-
-}
-
-
-resource "aws_route53_record" "dev-ns" {
-  zone_id = aws_route53_zone.primary.zone_id
-  name    = var.d_name
-  type    = "NS"
-  ttl     = "30"
-  records = aws_route53_zone.dev.name_servers
-}
-
 
 
 resource "aws_acm_certificate" "acm_cert" {
@@ -42,19 +28,19 @@ resource "aws_route53_record" "example" {
   records         = [each.value.record]
   ttl             = 60
   type            = each.value.type
-  zone_id         = "Z3AYJUIAXBOLK2"
+  zone_id         = aws_route53_zone.primary.zone_id
 }
 
 resource "aws_acm_certificate_validation" "validation" {
   certificate_arn         = aws_acm_certificate.acm_cert.arn
-  validation_record_fqdns = [for record in aws_route53_record.validation : record.fqdn]
+  validation_record_fqdns = [for record in aws_route53_record.example : record.fqdn]
 }
 
 
 
 
 resource "aws_route53_record" "www" {
-  zone_id = aws_route53_record.primary.zone_id
+  zone_id = aws_route53_zone.primary.zone_id
   name    = var.d_name
   type    = "A"
 
@@ -107,7 +93,7 @@ resource "aws_lb_listener" "listener_rules" {
 }
 
 resource "aws_lb_listener_rule" "static" {
-  listener_arn = aws_lb_listener.listener.arn
+  listener_arn = aws_lb_listener.listener_rules.arn
   priority     = 100
 
   action {
