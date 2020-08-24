@@ -20,9 +20,9 @@ EOF
 }
 
 
-resource "aws_iam_policy" "policy" {
-  name        = "test-policy"
-  description = "A test policy"
+resource "aws_iam_policy" "s3_policy" {
+  name        = "s3-policy"
+  description = "S3 IAM policy"
   
   policy = <<EOF
 {
@@ -48,10 +48,10 @@ EOF
 
 }
 
-resource "aws_iam_policy_attachment" "test-attach" {
-  name       = "test-attachment"
+resource "aws_iam_policy_attachment" "s3-attach" {
+  name       = "s3-attach"
   roles      = [aws_iam_role.s3_role.name]
-  policy_arn = aws_iam_policy.policy.arn
+  policy_arn = aws_iam_policy.s3_policy.arn
 }
 
 

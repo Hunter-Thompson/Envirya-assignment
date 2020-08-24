@@ -1,7 +1,7 @@
 # A security group for the ELB so it is accessible via the web
-resource "aws_security_group" "elb" {
+resource "aws_security_group" "alb" {
   name        = "terraform_example_elb"
-  description = "Used in the terraform"
+  description = "used for loadbalancer"
   vpc_id      = module.vpc.vpc_id
 
   # HTTP access from anywhere
@@ -25,15 +25,15 @@ resource "aws_security_group" "elb" {
 # the instances over SSH and HTTP
 resource "aws_security_group" "default" {
   name        = "terraform_example"
-  description = "Used in the terraform"
+  description = "used for instance"
   vpc_id      = module.vpc.vpc_id
 
-  # SSH access from anywhere
+  # SSH access from VPC
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["10.0.0.0/16"]
   }
 
   # HTTP access from the VPC
